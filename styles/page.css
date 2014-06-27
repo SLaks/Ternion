@@ -1,5 +1,18 @@
 ﻿body {
 	font-family: sans-serif;
+}
+
+.GameBackground {
 	background: url(background.svg);
-	background-size: 100px;
+	background-position: center center;
+	position: absolute;
+	width: 100%;
+	height: 100%;
+}
+
+.GameBackground > div {
+	position: absolute;
+	overflow: visible;
+	left: 50%;
+	top: 50%;
 }
