@@ -53,7 +53,7 @@ GameUI.prototype.createPending = function () {
 
 	var element = this.createTriangleElement(this.pendingTriangle);
 	if (this.pendingContainer.firstChild)
-		this.pendingContainer.replaceChild(this.pendingContainer.firstChild, element);
+		this.pendingContainer.replaceChild(element, this.pendingContainer.firstChild);
 	else
 		this.pendingContainer.appendChild(element);
 };

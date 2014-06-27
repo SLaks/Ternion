@@ -5,15 +5,23 @@
 	<link href="styles/page.css" rel="stylesheet" />
 </head>
 <body>
+	<div id="game"></div>
+
 	<h1>Ternion</h1>
 
-	<div id="game"></div>
+	<aside>
+		<h4>Next:</h4>
+		<div id="pending"></div>
+	</aside>
 
 	<script src="javascript/game.js"></script>
 	<script src="javascript/ui.js"></script>
 
 	<script>
-		var ui = new GameUI(document.getElementById('game'));
+		var ui = new GameUI(
+			document.getElementById('game'),
+			document.getElementById('pending')
+		);
 	</script>
 </body>
 </html>
