@@ -1,5 +1,5 @@
-﻿/// <reference path="mocha.js" />
-/// <reference path="chai.js" />
+﻿/// <reference path="lib/mocha.js" />
+/// <reference path="lib/chai.js" />
 /// <reference path="../javascript/game.js" />
 'use strict';
 
