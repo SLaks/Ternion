@@ -15,3 +15,8 @@ The `Triangle` class stores the contents of a triangle.  It just tracks the colo
 The `GameBoard` tracks the triangles in the board.  It stores every extant triangle, and it only allows mutations that result in a valid board.  (triangle orientations are simply computed from their locations)
 
 Individual triangles are passed as an array of `[x, y]`; these arrays are passed to and returned by methods in `GameBoard`.  Individual sides of a triangle are passed as arrays of `[x, y, index]`, where `index` is `0`, `1`, or `2`, as described above.
+
+#UI
+All of the triangle UI, including the background, the triangles within the board, and phantom/preview triangles, are drawn in SVG.  These SVG triangles have a width of 1 and a height of .866 (`h = Math.sqrt(w*w - (w/2) * (w/2))`, via Pythagorean Theorem), and are then scaled (via SVG transform or `background-size`) to the appropriate size.
+
+The triangles are laid out on a grid in units of half the width in the X axis and the entire height in the Y axis.
