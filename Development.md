@@ -1,6 +1,8 @@
 ﻿#Triangle grid
 The game board is a Cartesian grid of triangles.  To tessellate the triangles, every other triangle is inverted.  The origin, and all cells where  `x + y` is even, is upwards-pointing; odd cells are downwards-pointing.
 
+The grid is oriented like CSS; positive X & Y are in the lower-right quadrant.
+
 The sides of each triangle are identified by index.  `0` is the right side, `1` is the right side, and `2` is the vertical side (bottom for upwards-pointing; top for downwards-pointing).
 
 #Classes

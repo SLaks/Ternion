@@ -5,7 +5,6 @@
  * @param {int[]}	sides The colors of each side in the triangle (right, left, vertical).
  */
 function Triangle(sides) {
-	sides.sort();
 	this.sides = sides;
 }
 
@@ -20,7 +19,7 @@ Triangle.createRandom = function () {
 		Math.floor(Math.random() * Triangle.colorCount),
 		Math.floor(Math.random() * Triangle.colorCount),
 		Math.floor(Math.random() * Triangle.colorCount)
-	]);
+	].sort());
 };
 
 
@@ -36,8 +35,8 @@ function GameBoard() {
  * Gets the string key in the contents map for a given location.
  * @param {int[]}		location
  */
-GameBoard.prototype.key = function(location) {
-	return location.join(',');
+GameBoard.prototype.key = function (location) {
+	return location[0] + ',' + location[1];
 };
 
 
@@ -46,7 +45,7 @@ GameBoard.prototype.key = function(location) {
  * @param {int[]}		location
  */
 GameBoard.prototype.get = function (location) {
-	return this.contents[this.key(location)];
+	return this.contents[this.key(location)] || null;
 };
 
 
@@ -108,7 +107,7 @@ GameBoard.prototype.isAllowed = function (location, triangle) {
  * @param {int[]}		location
  * @param {Triangle}	triangle
  */
-GameBoard.prototype.add = function (location,triangle ) {
+GameBoard.prototype.add = function (location, triangle) {
 	if (this.get(location))
 		throw new Error('Cannot overwrite existing triangle');
 	if (!this.isAllowed(location, triangle))
