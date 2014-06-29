@@ -3,6 +3,7 @@
 'use strict';
 
 
+var svgNS = 'http://www.w3.org/2000/svg';
 function GameUI(container, pendingContainer) {
 	this.triangleWidth = 100;	// Width of a triangle in pixels
 	this.triangleHeight = this.triangleWidth * 0.866;
@@ -90,12 +91,35 @@ GameUI.prototype.hitTest = function (x, y) {
  *								If omitted, the element will not be positioned, and will point upwards.
  */
 GameUI.prototype.createTriangleElement = function (triangle, location) {
-	var element = document.createElement('svg');
+	var svg = document.createElementNS(svgNS, 'svg');
 
-	if (location) {
-		element.style.left = location[0] * (this.triangleWidth / 2) + 'px';
-		element.style.top = location[1] * this.triangleHeight + 'px';
+	function createPoint(x, y) {
+		var point = svg.createSVGPoint();
+		point.x = x;
+		point.y = y;
+		return point;
 	}
 
-	return element;
+	var polygon = document.createElementNS(svgNS, 'polygon');
+
+	polygon.points.appendItem(createPoint(0, 0.866));
+	polygon.points.appendItem(createPoint(1, 0.866));
+	polygon.points.appendItem(createPoint(0.5, 0));
+
+	// TODO: Draw color gradient
+	polygon.style.fill = 'red';
+
+	svg.appendChild(polygon);
+
+	svg.style.width = this.triangleWidth + 'px';
+	svg.style.height = this.triangleHeight + 'px';
+	svg.viewBox.baseVal.width = 1;
+	svg.viewBox.baseVal.height = 0.866;
+
+	if (location) {
+		svg.style.left = location[0] * (this.triangleWidth / 2) + 'px';
+		svg.style.top = location[1] * this.triangleHeight + 'px';
+	}
+
+	return svg;
 };
