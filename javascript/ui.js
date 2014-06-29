@@ -9,7 +9,7 @@ function GameUI(container) {
 	this.triangleHeight = this.triangleWidth * 0.866;
 	this.board = new GameBoard();
 
-	container.classList.add('GameBackground');
+	container.className = 'GameBackground';
 	container.style.backgroundSize = this.triangleWidth + 'px';
 
 	this.triangleContainer = document.createElement('div');
@@ -148,10 +148,11 @@ GameUI.prototype.createTriangleElement = function (triangle, location) {
 
 	svg.sides = triangle.sides;
 
-	svg.classList.add('Triangle');
 
 	if (location)
 		this.setLocation(svg, location);
+	else	// setLocation() sets the class for us
+		svg.setAttribute('class', 'Triangle');
 
 	return svg;
 };
