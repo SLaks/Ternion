@@ -4,7 +4,7 @@
 
 
 var svgNS = 'http://www.w3.org/2000/svg';
-function GameUI(container, pendingContainer) {
+function GameUI(container) {
 	this.triangleWidth = 100;	// Width of a triangle in pixels
 	this.triangleHeight = this.triangleWidth * 0.866;
 	this.board = new GameBoard();
@@ -12,7 +12,6 @@ function GameUI(container, pendingContainer) {
 	container.classList.add('GameBackground');
 	container.style.backgroundSize = this.triangleWidth + 'px';
 
-	this.pendingContainer = pendingContainer;
 	this.triangleContainer = document.createElement('div');
 	// Center the triangle at the center of the board
 	this.triangleContainer.style.marginLeft = -this.triangleWidth / 2 + 'px';
@@ -23,17 +22,35 @@ function GameUI(container, pendingContainer) {
 	this.addTriangle([0, 0]);
 
 	container.addEventListener('click', function (e) {
-		var offset = this.triangleContainer.getBoundingClientRect();
-		var location = this.hitTest(
-			e.clientX - offset.left,
-			e.clientY - offset.top
-		);
+		var location = this.getEventLocation(e);
 		if (this.board.get(location) || !this.board.isAllowed(location, this.pendingTriangle)) {
 			return;
 		}
 		this.addTriangle(location);
 	}.bind(this));
+
+	container.addEventListener('mousemove', function (e) {
+		var location = this.getEventLocation(e);
+		if (this.board.get(location))
+			this.pendingElement.setAttribute('class', 'Triangle Pending Preview');
+		else {
+			this.setLocation(this.pendingElement, location);
+			this.pendingElement.setAttribute('class', this.pendingElement.getAttribute('class') + ' Pending');
+		}
+	}.bind(this));
 }
+
+
+/**
+ * Finds the game location of the specified mouse event.
+ */
+GameUI.prototype.getEventLocation = function (e) {
+	var offset = this.triangleContainer.getBoundingClientRect();
+	return this.hitTest(
+		e.clientX - offset.left,
+		e.clientY - offset.top
+	);
+};
 
 
 /**
@@ -41,7 +58,7 @@ function GameUI(container, pendingContainer) {
  */
 GameUI.prototype.addTriangle = function (location) {
 	this.board.add(location, this.pendingTriangle);
-	this.triangleContainer.appendChild(this.createTriangleElement(this.pendingTriangle, location));
+	this.setLocation(this.pendingElement, location);
 	this.createPending();
 };
 
@@ -52,11 +69,9 @@ GameUI.prototype.addTriangle = function (location) {
 GameUI.prototype.createPending = function () {
 	this.pendingTriangle = Triangle.createRandom();
 
-	var element = this.createTriangleElement(this.pendingTriangle);
-	if (this.pendingContainer.firstChild)
-		this.pendingContainer.replaceChild(element, this.pendingContainer.firstChild);
-	else
-		this.pendingContainer.appendChild(element);
+	this.pendingElement = this.createTriangleElement(this.pendingTriangle);
+	this.pendingElement.setAttribute('class', 'Triangle Pending Preview');
+	this.triangleContainer.appendChild(this.pendingElement);
 };
 
 
@@ -120,18 +135,25 @@ GameUI.prototype.createTriangleElement = function (triangle, location) {
 
 	svg.classList.add('Triangle');
 
-	if (location) {
-		svg.style.left = location[0] * (this.triangleWidth / 2) + 'px';
-		svg.style.top = location[1] * this.triangleHeight + 'px';
-
-		var orientation = this.board.orientation(location);
-
-		if (orientation)
-			svg.classList.add('Inverted');
-
-		svg.location = location;
-		svg.orientation = orientation;
-	}
+	if (location)
+		this.setLocation(svg, location);
 
 	return svg;
+};
+
+
+/**
+ * Moves an existing triangle element to the specified game coordinates
+ * @param {Element} element	The <svg> element to move
+ * @param {int[]} location	The game location of to place it.
+ */
+GameUI.prototype.setLocation = function (element, location) {
+	element.style.left = location[0] * (this.triangleWidth / 2) + 'px';
+	element.style.top = location[1] * this.triangleHeight + 'px';
+
+	var orientation = this.board.orientation(location);
+	this.pendingElement.setAttribute('class', orientation ? 'Triangle Inverted' : 'Triangle');
+
+	element.location = location;
+	element.orientation = orientation;
 };

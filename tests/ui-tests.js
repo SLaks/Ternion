@@ -11,12 +11,11 @@ var expect = chai.expect;
 //AVA
 
 describe('GameUI', function () {
-	var container = document.createElement('div'), pendingContainer = document.createElement('div');
-	var ui = new GameUI(container, pendingContainer);
+	var container = document.createElement('div');
+	var ui = new GameUI(container);
 	beforeEach(function () {
 		container = document.createElement('div');
-		pendingContainer = document.createElement('div');
-		ui = new GameUI(container, pendingContainer);
+		ui = new GameUI(container);
 		document.body.appendChild(container);
 	});
 	afterEach(function () {
@@ -41,18 +40,20 @@ describe('GameUI', function () {
 	it('should create a pending triangle', function () {
 		expect(ui.pendingTriangle).to.not.be.null;
 
-		expect(ui.pendingContainer.firstElementChild.sides).to.deep.equal(ui.pendingTriangle.sides);
+		expect(ui.pendingElement.sides).to.deep.equal(ui.pendingTriangle.sides);
 	});
 
 	it('should add & recreate the pending triangle', function () {
 		var oldPending = ui.pendingTriangle;
+		var oldElement = ui.pendingElement;
 
 		ui.addTriangle([2, 2]);
 		expect(ui.board.get([2, 2])).to.equal(oldPending);
-		assertRenderedTriangle(ui.triangleContainer.lastElementChild);
+		assertRenderedTriangle(oldElement);
 
 		expect(ui.pendingTriangle).to.not.equal(oldPending);
-		expect(ui.pendingContainer.firstElementChild.sides).to.deep.equal(ui.pendingTriangle.sides);
+		expect(ui.pendingElement).to.not.equal(oldElement);
+		expect(ui.pendingElement.sides).to.deep.equal(ui.pendingTriangle.sides);
 	});
 
 	it('should hittest existing triangles');

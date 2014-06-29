@@ -22,6 +22,10 @@
 
 .Triangle {
 	position: absolute;
+	-moz-transition: all ease-out .15s;
+	-o-transition: all ease-out .15s;
+	-webkit-transition: all ease-out .15s;
+	transition: all ease-out .15s;
 }
 
 .Triangle.Inverted {
@@ -30,4 +34,19 @@
 	-o-transform: rotate(180deg);
 	-webkit-transform: rotate(180deg);
 	transform: rotate(180deg);
+}
+
+.Triangle.Pending {
+	opacity: .5;
+}
+
+.Triangle.Pending.Preview {
+	/* Override any leftover positioning from mouse hover. */
+	/* TODO: Proper layout */
+	top: -50px !important;
+	left: -500px !important;
+}
+
+.Triangle.Pending.Preview:before {
+	content: 'Next';
 }
