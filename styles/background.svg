@@ -1,4 +1,4 @@
-﻿<svg width="100" height="173.2" viewBox="0 0 1 1.732" xmlns="http://www.w3.org/2000/svg">
+﻿<svg width="100" height="173.2" viewBox="-.5 .433 1 1.732" xmlns="http://www.w3.org/2000/svg">
 	<style type="text/css">
 		.triangle {
 			fill: #ccc;
@@ -10,12 +10,17 @@
 			fill: #eee;
 		}
 	</style>
-
+	<!-- To align with the triangle grid, the center of this image
+		 must be the center of an upwards-pointing triangle. -->
+	<polygon points="0,.866 1,.866 .5,0" class="triangle"			transform="translate(-1, 0)" />
 	<polygon points="0,.866 1,.866 .5,0" class="triangle inverted"	transform="translate(-.5, 0)	rotate(180, .5, .433)" />
 	<polygon points="0,.866 1,.866 .5,0" class="triangle" />
-	<polygon points="0,.866 1,.866 .5,0" class="triangle inverted"	transform="translate(+.5, 0)	rotate(180, .5, .433)" />
 
+	<polygon points="0,.866 1,.866 .5,0" class="triangle inverted"	transform="translate(-1, .866)	rotate(180, .5, .433)" />
 	<polygon points="0,.866 1,.866 .5,0" class="triangle"			transform="translate(-.5, .866)" />
 	<polygon points="0,.866 1,.866 .5,0" class="triangle inverted"	transform="translate(0, .866)	rotate(180, .5, .433)" />
-	<polygon points="0,.866 1,.866 .5,0" class="triangle"			transform="translate(+.5, .866)" />
+
+	<polygon points="0,.866 1,.866 .5,0" class="triangle"			transform="translate(-1, 1.732)" />
+	<polygon points="0,.866 1,.866 .5,0" class="triangle inverted"	transform="translate(-.5, 1.732)	rotate(180, .5, .433)" />
+	<polygon points="0,.866 1,.866 .5,0" class="triangle"			transform="translate(0.0, 1.732)" />
 </svg>

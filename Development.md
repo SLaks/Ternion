@@ -20,3 +20,5 @@ Individual triangles are passed as an array of `[x, y]`; these arrays are passed
 All of the triangle UI, including the background, the triangles within the board, and phantom/preview triangles, are drawn in SVG.  These SVG triangles have a width of 1 and a height of .866 (`h = Math.sqrt(w*w - (w/2) * (w/2))`, via Pythagorean Theorem), and are then scaled (via SVG transform or `background-size`) to the appropriate size.
 
 The triangles are laid out on a grid in units of half the width in the X axis and the entire height in the Y axis.  The contents of the grid are drawn in an absolutely positioned element, centered (with CSS) so that the middle of the [0, 0] triangle is at the center of the screen.
+The background is aligned to the triangle grid using `background-position: center center`, with the center of an upwards-pointing triangle in the center of the image.
+Because the centering is achieved in CSS, no Javascript is needed to re-align things as the window is resized.

@@ -15,8 +15,8 @@ function GameUI(container, pendingContainer) {
 	this.pendingContainer = pendingContainer;
 	this.triangleContainer = document.createElement('div');
 	// Center the triangle at the center of the board
-	this.triangleContainer.style.marginLeft = -this.triangleWidth / 2;
-	this.triangleContainer.style.marginTop = -this.triangleHeight / 2;
+	this.triangleContainer.style.marginLeft = -this.triangleWidth / 2 + 'px';
+	this.triangleContainer.style.marginTop = -this.triangleHeight / 2 + 'px';
 	container.appendChild(this.triangleContainer);
 
 	this.createPending();
