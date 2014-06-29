@@ -22,13 +22,13 @@ function GameUI(container, pendingContainer) {
 	this.createPending();
 	this.addTriangle([0, 0]);
 
-	this.triangleContainer.addEventListener('click', function (e) {
+	container.addEventListener('click', function (e) {
 		var offset = this.triangleContainer.getBoundingClientRect();
 		var location = this.hitTest(
-			e.clientX - offset.left / 2,
-			e.clienty - offset.top / 2
+			e.clientX - offset.left,
+			e.clientY - offset.top
 		);
-		if (!this.board.isAllowed(location, this.pendingTriangle)) {
+		if (this.board.get(location) || !this.board.isAllowed(location, this.pendingTriangle)) {
 			return;
 		}
 		this.addTriangle(location);
@@ -79,7 +79,7 @@ GameUI.prototype.hitTest = function (x, y) {
 			column--;
 	}
 
-	return [row, column];
+	return [column, row];
 };
 
 
@@ -113,12 +113,24 @@ GameUI.prototype.createTriangleElement = function (triangle, location) {
 
 	svg.style.width = this.triangleWidth + 'px';
 	svg.style.height = this.triangleHeight + 'px';
-	svg.viewBox.baseVal.width = 1;
-	svg.viewBox.baseVal.height = 0.866;
+
+	svg.setAttribute('viewBox', '0 0 1 0.866');
+
+	svg.sides = triangle.sides;
+
+	svg.classList.add('Triangle');
 
 	if (location) {
 		svg.style.left = location[0] * (this.triangleWidth / 2) + 'px';
 		svg.style.top = location[1] * this.triangleHeight + 'px';
+
+		var orientation = this.board.orientation(location);
+
+		if (orientation)
+			svg.classList.add('Inverted');
+
+		svg.location = location;
+		svg.orientation = orientation;
 	}
 
 	return svg;

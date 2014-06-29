@@ -22,9 +22,11 @@
 		"it":  true,
 		"before":  true,
 		"beforeEach":  true,
+		"afterEach":  true,
 		"mocha":  true,
 		"chai":  true,
 		"GameBoard": true,
-		"Triangle": true
+		"Triangle": true,
+		"GameUI": true
 	}
 } 
