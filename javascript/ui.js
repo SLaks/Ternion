@@ -79,13 +79,28 @@ GameUI.prototype.createPending = function () {
  * Returns the triangle containing the given pixel location.
  */
 GameUI.prototype.hitTest = function (x, y) {
+	// First, get the triangle starting in the cell containing the mouse.
 	var row = Math.floor(y / (this.triangleHeight));
 	var column = Math.floor(x / (this.triangleWidth / 2));
 
+	// Now, check whether the mouse is above the left side of that
+	// triangle, in which case it is actually within the preceding
+	// triangle.
+
+	// Which way does the slant point when moving rightwards?
 	var isDownSlant = this.board.orientation([column, row]);
 
-	x %= this.triangleWidth / 2;
-	y %= this.triangleHeight;
+	// http://stackoverflow.com/a/4467559/34397
+	function mod(a, b) { return ((a % b) + b) % b; }
+
+
+	// Get the position of the mouse relative to the origin of the
+	// triangle containing the slant.  Even if the location of the
+	// triangle is negative, these need to be positive, so % won't
+	// work properly.
+	x = mod(x, this.triangleWidth / 2);
+	y = mod(y, this.triangleHeight);
+
 	if (!isDownSlant) {
 		if (y < this.triangleHeight - x / (this.triangleWidth / 2) * this.triangleHeight)
 			column--;
