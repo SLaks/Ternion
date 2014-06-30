@@ -1,0 +1,69 @@
+﻿@heightRatio: 0.866;
+
+.transition(@property) {
+	-moz-transition: @property ease-out .15s;
+	-o-transition: @property ease-out .15s;
+	-webkit-transition: @property ease-out .15s;
+	transition: @property ease-out .15s;
+}
+
+body {
+	font-family: sans-serif;
+}
+
+.GameBackground {
+	background: url(background.svg);
+	background-position: center center;
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	z-index: -1;
+	/* 
+	 * This font-size specifies the width of a single triangle. 
+	 * All layout is specified in EMs, using this value.
+	 */
+	font-size: 10vw;
+	.transition(background-size);
+	background-size: 1em;
+}
+
+.GameBackground > div {
+	position: absolute;
+	overflow: visible;
+	left: 50%;
+	top: 50%;
+	/* Shift the origin so that the center of the triangle is at the center of the window. */
+	margin-left: -.5em;
+	margin-top: -@heightRatio / 2em;
+}
+
+.Triangle {
+	.transition(all);
+	position: absolute;
+	width: 1em;
+	height: @heightRatio * 1em;
+}
+
+.Triangle.Inverted {
+	-moz-transform: rotate(180deg);
+	-ms-transform: rotate(180deg);
+	-o-transform: rotate(180deg);
+	-webkit-transform: rotate(180deg);
+	transform: rotate(180deg);
+}
+
+.Triangle.Pending {
+	opacity: .5;
+}
+
+.Triangle.Pending.Preview {
+	/* Override any leftover positioning from mouse hover. */
+	top: -2em * @heightRatio !important;
+	left: -5em !important;
+}
+
+.Triangle.Pending.Preview:before {
+	content: 'Next';
+}
