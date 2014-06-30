@@ -17,8 +17,11 @@ The `GameBoard` tracks the triangles in the board.  It stores every extant trian
 Individual triangles are passed as an array of `[x, y]`; these arrays are passed to and returned by methods in `GameBoard`.  Individual sides of a triangle are passed as arrays of `[x, y, index]`, where `index` is `0`, `1`, or `2`, as described above.
 
 #UI
-All of the triangle UI, including the background, the triangles within the board, and phantom/preview triangles, are drawn in SVG.  These SVG triangles have a width of 1 and a height of .866 (`h = Math.sqrt(w*w - (w/2) * (w/2))`, via Pythagorean Theorem), and are then scaled (via SVG transform or `background-size`) to the appropriate size.
+All of the triangle UI, including the background, the triangles within the board, and phantom/preview triangles, are drawn in SVG.  These SVG triangles have a width of 1 and a height of .866 (`h = Math.sqrt(w*w - (w/2) * (w/2))`, via Pythagorean Theorem), and are then scaled (via SVG size and `background-size`) to the appropriate size.
+
+The triangle size is specified exactly once, in the `font-size` of the background element.  All element sizes and positions are specified in `em`s using this font-size.  This allows the entire UI to scale cleanly using media queries that change this font-size (or, better yet, viewport units).
 
 The triangles are laid out on a grid in units of half the width in the X axis and the entire height in the Y axis.  The contents of the grid are drawn in an absolutely positioned element, centered (with CSS) so that the middle of the [0, 0] triangle is at the center of the screen.
 The background is aligned to the triangle grid using `background-position: center center`, with the center of an upwards-pointing triangle in the center of the image.
 Because the centering is achieved in CSS, no Javascript is needed to re-align things as the window is resized.
+

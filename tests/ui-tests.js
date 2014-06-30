@@ -12,9 +12,11 @@ var expect = chai.expect;
 
 describe('GameUI', function () {
 	var container = document.createElement('div');
+	container.appendChild(document.createElement('div'));
 	var ui = new GameUI(container);
 	beforeEach(function () {
 		container = document.createElement('div');
+		container.appendChild(document.createElement('div'));
 		ui = new GameUI(container);
 		document.body.appendChild(container);
 	});

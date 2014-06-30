@@ -3,25 +3,18 @@
 'use strict';
 
 
+var heightRatio = 0.866;
+
 var svgNS = 'http://www.w3.org/2000/svg';
-function GameUI(container) {
-	this.triangleWidth = 100;	// Width of a triangle in pixels
-	this.triangleHeight = this.triangleWidth * 0.866;
+function GameUI(background) {
 	this.board = new GameBoard();
 
-	container.className = 'GameBackground';
-	container.style.backgroundSize = this.triangleWidth + 'px';
-
-	this.triangleContainer = document.createElement('div');
-	// Center the triangle at the center of the board
-	this.triangleContainer.style.marginLeft = -this.triangleWidth / 2 + 'px';
-	this.triangleContainer.style.marginTop = -this.triangleHeight / 2 + 'px';
-	container.appendChild(this.triangleContainer);
+	this.triangleContainer = background.firstElementChild;
 
 	this.createPending();
 	this.addTriangle([0, 0]);
 
-	container.addEventListener('click', function (e) {
+	background.addEventListener('click', function (e) {
 		var location = this.getEventLocation(e);
 		if (this.board.get(location) || !this.board.isAllowed(location, this.pendingTriangle)) {
 			return;
@@ -29,7 +22,7 @@ function GameUI(container) {
 		this.addTriangle(location);
 	}.bind(this));
 
-	container.addEventListener('mousemove', function (e) {
+	background.addEventListener('mousemove', function (e) {
 		var location = this.getEventLocation(e);
 		if (this.board.get(location))
 			this.pendingElement.setAttribute('class', 'Triangle Pending Preview');
@@ -79,9 +72,16 @@ GameUI.prototype.createPending = function () {
  * Returns the triangle containing the given pixel location.
  */
 GameUI.prototype.hitTest = function (x, y) {
-	// First, get the triangle starting in the cell containing the mouse.
-	var row = Math.floor(y / (this.triangleHeight));
-	var column = Math.floor(x / (this.triangleWidth / 2));
+	// Get the current triangle size from the CSS (this may change
+	// at any time due to media queries)
+	var triangleWidth = parseInt(getComputedStyle(this.triangleContainer).fontSize, 10);
+	var xUnit = triangleWidth / 2;
+	var triangleHeight = triangleWidth * heightRatio;
+
+	// First, get the triangle starting in the cell containing the
+	// mouse cursor.
+	var row = Math.floor(y / triangleHeight);
+	var column = Math.floor(x / xUnit);
 
 	// Now, check whether the mouse is above the left side of that
 	// triangle, in which case it is actually within the preceding
@@ -98,14 +98,14 @@ GameUI.prototype.hitTest = function (x, y) {
 	// triangle containing the slant.  Even if the location of the
 	// triangle is negative, these need to be positive, so % won't
 	// work properly.
-	x = mod(x, this.triangleWidth / 2);
-	y = mod(y, this.triangleHeight);
+	x = mod(x, xUnit);
+	y = mod(y, triangleHeight);
 
 	if (!isDownSlant) {
-		if (y < this.triangleHeight - x / (this.triangleWidth / 2) * this.triangleHeight)
+		if (y < triangleHeight - x / xUnit * triangleHeight)
 			column--;
 	} else {
-		if (y > x / (this.triangleWidth / 2) * this.triangleHeight)
+		if (y > x / xUnit * triangleHeight)
 			column--;
 	}
 
@@ -132,8 +132,8 @@ GameUI.prototype.createTriangleElement = function (triangle, location) {
 
 	var polygon = document.createElementNS(svgNS, 'polygon');
 
-	polygon.points.appendItem(createPoint(0, 0.866));
-	polygon.points.appendItem(createPoint(1, 0.866));
+	polygon.points.appendItem(createPoint(0, heightRatio));
+	polygon.points.appendItem(createPoint(1, heightRatio));
 	polygon.points.appendItem(createPoint(0.5, 0));
 
 	// TODO: Draw color gradient
@@ -141,10 +141,7 @@ GameUI.prototype.createTriangleElement = function (triangle, location) {
 
 	svg.appendChild(polygon);
 
-	svg.style.width = this.triangleWidth + 'px';
-	svg.style.height = this.triangleHeight + 'px';
-
-	svg.setAttribute('viewBox', '0 0 1 0.866');
+	svg.setAttribute('viewBox', '0 0 1 ' + heightRatio);
 
 	svg.sides = triangle.sides;
 
@@ -164,8 +161,8 @@ GameUI.prototype.createTriangleElement = function (triangle, location) {
  * @param {int[]} location	The game location of to place it.
  */
 GameUI.prototype.setLocation = function (element, location) {
-	element.style.left = location[0] * (this.triangleWidth / 2) + 'px';
-	element.style.top = location[1] * this.triangleHeight + 'px';
+	element.style.left = (location[0] / 2) + 'em';
+	element.style.top = (location[1] * heightRatio) + 'em';
 
 	var orientation = this.board.orientation(location);
 	this.pendingElement.setAttribute('class', orientation ? 'Triangle Inverted' : 'Triangle');

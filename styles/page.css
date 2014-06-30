@@ -11,6 +11,12 @@
 	width: 100%;
 	height: 100%;
 	z-index: -1;
+	/* 
+	 * This font-size specifies the width of a single triangle. 
+	 * All layout is specified in EMs, using this value.
+	 */
+	font-size: 100px;
+	background-size: 1em;
 }
 
 .GameBackground > div {
@@ -18,6 +24,9 @@
 	overflow: visible;
 	left: 50%;
 	top: 50%;
+	/* Shift the origin so that the center of the triangle is at the center of the window. */
+	margin-left: -.5em;
+	margin-top: -.433em;
 }
 
 .Triangle {
@@ -26,6 +35,8 @@
 	-o-transition: all ease-out .15s;
 	-webkit-transition: all ease-out .15s;
 	transition: all ease-out .15s;
+	width: 1em;
+	height: .866em;
 }
 
 .Triangle.Inverted {
@@ -42,9 +53,8 @@
 
 .Triangle.Pending.Preview {
 	/* Override any leftover positioning from mouse hover. */
-	/* TODO: Proper layout */
-	top: -50px !important;
-	left: -500px !important;
+	top: -1.732em !important;
+	left: -5em !important;
 }
 
 .Triangle.Pending.Preview:before {
